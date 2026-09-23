@@ -1,3 +1,0 @@
-<?php
-declare(strict_types=1);
-require_once __DIR__ . '/config/db.php'; require_once __DIR__ . '/includes/auth.php'; requireLogin(); $invoiceId = filter_input(INPUT_GET, 'invoice_id', FILTER_VALIDATE_INT); if ($invoiceId) { $stmt = $pdo->prepare("UPDATE payments p JOIN invoices i ON i.id = p.invoice_id SET p.status = 'approved', p.paid_at = NOW(), i.status = 'paid' WHERE p.invoice_id = :invoice_id AND p.tenant_id = :tenant_id AND p.payment_method = 'gcash_api' AND p.status = 'pending'"); $stmt->execute([':invoice_id'=>$invoiceId, ':tenant_id'=>currentUser()['id']]); } redirectWith('/Dormitory/tenant/dashboard.php','success','Payment completed successfully.');
